@@ -3,14 +3,21 @@ import face_recognition
 import shutil
 from sklearn.cluster import DBSCAN
 import numpy as np
+from tkinter import filedialog, Tk
 
-# Load the new photo from the "Pictures" folder
-new_image_path = "" #add image path here
+def select_new_image():
+    root = Tk()
+    root.withdraw()
+    new_image_path = filedialog.askopenfilename(title="Select New Image")
+    return new_image_path
+
+# Load the new photo from the selected path
+new_image_path = select_new_image()
 new_image = face_recognition.load_image_file(new_image_path)
 new_face_locations = face_recognition.face_locations(new_image)
 new_face_encodings = face_recognition.face_encodings(new_image, new_face_locations)
 
-# Compare the detected faces with known faces in the "Pictures" folder
+# Rest of your existing code...
 known_faces = []
 known_face_encodings = []
 for filename in os.listdir("Pictures"):
@@ -63,4 +70,7 @@ for label in clustered_images.keys():
     shutil.copy(new_image_path, group_folder)
     print(f"Copied new photo to {group_folder}")
 
-print("Group folders created with similar photos, avoiding duplicates.")
+# Display results using Tkinter messagebox
+from tkinter import messagebox
+
+messagebox.showinfo("Process Completed", "Group folders created with similar photos, avoiding duplicates.")
